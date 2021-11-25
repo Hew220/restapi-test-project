@@ -16,6 +16,18 @@
     <properties>
         <java.version>11</java.version>
     </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>nexus-snapshot</id>
+            <url>http://localhost:8081/repository/nexus-snapshot/</url>
+        </snapshotRepository>
+        <repository>
+            <id>nexus-release</id>
+            <url>http://localhost:8081/repository/nexus-release/</url>
+        </repository>
+    </distributionManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
