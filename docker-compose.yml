@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+
+  mysql-standalone:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=newdb
+      - MYSQL_USER=springuser
+      - MYSQL_PASSWORD=ThePassword
+    ports:
+      - "3307:3306"
+
+  restapi-test:
+    image: restapi-test-project
+    depends_on:
+      - mysql-standalone
+    ports:
+      - "8090:8090"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-standalone:3307/newdb

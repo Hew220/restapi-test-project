@@ -1,18 +1,21 @@
 package hu.wup.restapitestproject.services;
 
+import hu.wup.restapitestproject.exceptions.BookNotFoundException;
 import hu.wup.restapitestproject.model.Book;
 
 public interface BookService {
 
     Iterable<Book> getAllBooks();
 
-    Object getBookById(long id);
+    Book getBookById(long id) throws BookNotFoundException;
 
     void insertBook(Book book);
 
     void deleteBook(long id);
 
-    void updateBook(long id, String title, String author);
+    void updateBook(long id, Book book);
+
+
 
 
 
