@@ -3,6 +3,8 @@ package hu.wup.restapitestproject.services;
 import hu.wup.restapitestproject.exceptions.BookNotFoundException;
 import hu.wup.restapitestproject.model.Book;
 
+import java.util.Optional;
+
 public interface BookService {
 
     Iterable<Book> getAllBooks();

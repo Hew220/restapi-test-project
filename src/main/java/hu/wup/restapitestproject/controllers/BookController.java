@@ -29,12 +29,9 @@ public class BookController {
 
     @GetMapping("/getBook/{bookId}")
     public ResponseEntity<Book> getBookById(@PathVariable long bookId) {
-        ResponseEntity<Book> response = null;
+        ResponseEntity<Book> response;
         Book book;
         try {
-//           if(bookId < 0) {
-//               throw new BookNotFoundException("bookId must be greater than 0");
-//           }
            book = bookService.getBookById(bookId);
            response = new ResponseEntity<>(book, HttpStatus.OK);
 
@@ -44,21 +41,16 @@ public class BookController {
 
         }
         return response;
-
-
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody
-    ResponseEntity<Book> addNewBook(@RequestBody Book book) {
+    public @ResponseBody ResponseEntity<Book> addNewBook(@RequestBody Book book) {
 
         //logger.info("addNewBook " + book.toString());
         bookService.insertBook(book);
         return new ResponseEntity<>(book, HttpStatus.OK);
-
-
     }
 
     @GetMapping(path= "/all")

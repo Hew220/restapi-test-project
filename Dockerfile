@@ -4,5 +4,5 @@ WORKDIR app
 
 COPY /target/restapi-test-project.jar .
 
-CMD ["java", "-jar", "restapi-test-project.jar"]
+CMD ["sh","-c", "sleep 60 && java -jar restapi-test-project.jar"]
 

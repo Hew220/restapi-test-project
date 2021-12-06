@@ -13,10 +13,15 @@ services:
       - "3307:3306"
 
   restapi-test:
-    image: restapi-test-project
+    image: restapi_image
     depends_on:
       - mysql-standalone
+    volumes:
+      - /d/gitClonedProjects:/tmp/log
     ports:
-      - "8090:8090"
+      - "8090:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-standalone:3307/newdb
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-standalone:3306/newdb?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=springuser
+      - SPRING_DATASOURCE_PASSWORD=ThePassword
+      - APP_LOGGING_FOLDER=/tmp/log
