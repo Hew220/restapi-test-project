@@ -1,6 +1,6 @@
 package hu.wup.restapitestproject.controllers;
 
-import hu.wup.restapitestproject.exceptions.BookNotFoundException;
+import hu.wup.restapitestproject.exceptions.ApiRequestException;
 import hu.wup.restapitestproject.model.Book;
 import hu.wup.restapitestproject.services.BookService;
 import org.apache.logging.log4j.LogManager;
@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,18 +28,10 @@ public class BookController {
 
     @GetMapping("/getBook/{bookId}")
     public ResponseEntity<Book> getBookById(@PathVariable long bookId) {
-        ResponseEntity<Book> response;
-        Book book;
-        try {
-           book = bookService.getBookById(bookId);
-           response = new ResponseEntity<>(book, HttpStatus.OK);
+        Book book = bookService.getBookById(bookId);
+        logger.debug("Book id: " + book.getId());
+        return new ResponseEntity<>(book, HttpStatus.OK);
 
-        }catch (BookNotFoundException exception) {
-            logger.error(exception.getMessage());
-            response = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-
-        }
-        return response;
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST,
@@ -68,6 +59,7 @@ public class BookController {
     public @ResponseBody ResponseEntity<Book> updateBook(@PathVariable("bookId") long bookId,@RequestBody Book book){
         bookService.updateBook(bookId,book);
         return new ResponseEntity<>(book, HttpStatus.CREATED);
+
     }
 
 
