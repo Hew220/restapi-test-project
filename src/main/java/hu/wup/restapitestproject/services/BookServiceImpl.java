@@ -1,6 +1,7 @@
 package hu.wup.restapitestproject.services;
 
-import hu.wup.restapitestproject.exceptions.ApiRequestException;
+import hu.wup.restapitestproject.exceptions.BookIsAlreadyExistException;
+import hu.wup.restapitestproject.exceptions.BookNotFoundException;
 import hu.wup.restapitestproject.model.Book;
 import hu.wup.restapitestproject.repositories.BookRepository;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +21,8 @@ public class BookServiceImpl implements BookService {
         this.bookRepository = bookRepository;
     }
 
+
+
     @Override
     public Iterable<Book> getAllBooks() {
         return bookRepository.findAll();
@@ -33,7 +36,7 @@ public class BookServiceImpl implements BookService {
             book = result.get();
         }else {
             logger.error("Book hasn't been found by this id:" + id);
-            throw new ApiRequestException(" Book has not been found by this id " + id);
+            throw new BookNotFoundException(" Book has not been found by this id " + id);
         }
         logger.debug(result.get());
         return book;
@@ -41,8 +44,22 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public Book getBookByTitle(String title) {
+        Optional<Book> result = bookRepository.findByTitle(title);
+        if(result.isPresent()) {
+            return result.get();
+        }
+        return null;
+    }
+
+    @Override
     public void insertBook(Book book) {
-        bookRepository.save(book);
+        Book existingBook = getBookByTitle(book.getTitle());
+        if(existingBook == null) {
+            bookRepository.save(book);
+        }else {
+            throw new BookIsAlreadyExistException("Book is already exist by this title " + book.getTitle());
+        }
     }
 
     @Override
@@ -50,7 +67,7 @@ public class BookServiceImpl implements BookService {
         boolean exists = bookRepository.existsById(bookId);
         logger.debug("deleteBook by: " + bookId);
         if (!exists) {
-            throw new ApiRequestException("Book does not exist by this id " + bookId);
+            throw new BookNotFoundException("Book does not exist by this id " + bookId);
         }
         bookRepository.deleteById(bookId);
     }
@@ -61,7 +78,7 @@ public class BookServiceImpl implements BookService {
         Book existingBook = bookRepository.findById(bookId).orElse(null);
         logger.debug("updateBook by: " + bookId);
         if (existingBook == null) {
-            throw new ApiRequestException("Book does not exist by this id " + bookId);
+            throw new BookNotFoundException("Book does not exist by this id " + bookId);
         }else {
          existingBook.setAuthor(book.getAuthor());
          existingBook.setTitle(book.getTitle());

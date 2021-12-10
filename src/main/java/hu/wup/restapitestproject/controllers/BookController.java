@@ -1,6 +1,5 @@
 package hu.wup.restapitestproject.controllers;
 
-import hu.wup.restapitestproject.exceptions.ApiRequestException;
 import hu.wup.restapitestproject.model.Book;
 import hu.wup.restapitestproject.services.BookService;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +28,7 @@ public class BookController {
     @GetMapping("/getBook/{bookId}")
     public ResponseEntity<Book> getBookById(@PathVariable long bookId) {
         Book book = bookService.getBookById(bookId);
-        logger.debug("Book id: " + book.getId());
+        logger.info("Book id: " + book.getId());
         return new ResponseEntity<>(book, HttpStatus.OK);
 
     }
@@ -39,7 +38,6 @@ public class BookController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody ResponseEntity<Book> addNewBook(@RequestBody Book book) {
 
-        //logger.info("addNewBook " + book.toString());
         bookService.insertBook(book);
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
@@ -58,7 +56,8 @@ public class BookController {
     @PutMapping(path = "/update/{bookId}")
     public @ResponseBody ResponseEntity<Book> updateBook(@PathVariable("bookId") long bookId,@RequestBody Book book){
         bookService.updateBook(bookId,book);
-        return new ResponseEntity<>(book, HttpStatus.CREATED);
+        Book updatedBook = bookService.getBookById(bookId);
+        return new ResponseEntity<>(updatedBook, HttpStatus.CREATED);
 
     }
 
