@@ -2,6 +2,8 @@ package hu.wup.restapitestproject.services;
 
 import hu.wup.restapitestproject.model.Book;
 
+import java.util.List;
+
 public interface BookService {
 
     Iterable<Book> getAllBooks();
@@ -15,6 +17,10 @@ public interface BookService {
     void deleteBook(long id);
 
     void updateBook(long id, Book book);
+
+    List<Book> getAllBookByTitleASC();
+
+    List<Book> getAllBookByTitleDESC();
 
 
 

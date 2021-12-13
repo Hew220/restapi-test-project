@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -52,6 +53,7 @@ public class BookServiceImpl implements BookService {
         return null;
     }
 
+
     @Override
     public void insertBook(Book book) {
         Book existingBook = getBookByTitle(book.getTitle());
@@ -84,5 +86,17 @@ public class BookServiceImpl implements BookService {
          existingBook.setTitle(book.getTitle());
         }
         bookRepository.save(existingBook);
+    }
+
+    @Override
+    public List<Book> getAllBookByTitleASC() {
+        Optional<List<Book>> result = bookRepository.findAllByOrderByTitleAsc();
+        return result.get();
+    }
+
+    @Override
+    public List<Book> getAllBookByTitleDESC() {
+        Optional<List<Book>> result = bookRepository.findAllByOrderByTitleDesc();
+        return result.get();
     }
 }

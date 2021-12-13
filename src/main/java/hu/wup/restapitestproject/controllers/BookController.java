@@ -9,6 +9,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/")
 public class BookController {
@@ -31,6 +33,17 @@ public class BookController {
         logger.info("Book id: " + book.getId());
         return new ResponseEntity<>(book, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/sortbookby")
+    public ResponseEntity<List<Book>> sortBooksByTitle(@RequestParam String title) {
+        List<Book> bookList = null;
+        if(title.equals("asc")) {
+           bookList = bookService.getAllBookByTitleASC();
+        }else if(title.equals("desc")) {
+            bookList = bookService.getAllBookByTitleDESC();
+        }
+        return new ResponseEntity<>(bookList, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST,
